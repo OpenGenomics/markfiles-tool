@@ -108,7 +108,14 @@ def mainmap(args):
             for data in reader:
                 writer.writerow([data[0], 'filterr', data[1]])
         log("wrote %s" % markfile)
-    mafreader = csv.DictReader(args.maf, delimiter = '\t')
+
+    ckfile = open(args.maf.name,'r')
+    cktext = ckfile.readlines()
+    if cktext[0][0] == "#":
+        mafreader = csv.DictReader(cktext[1:], delimiter = '\t')
+    else: 
+        mafreader = csv.DictReader(args.maf, delimiter = '\t')
+
     for i, record in enumerate(mafreader):
         writer.writerow([mafkeyfun(record, args.type), 'mafr'] + ['%s|%s' % (k, v) for k, v in record.items()])
         if i % 100000 == 0:
