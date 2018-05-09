@@ -61,7 +61,13 @@ def batch(iter):
 
 def mainreduce(args):
     reader = csv.reader(args.INPUT, delimiter = '\t')
-    mafreader = csv.DictReader(args.maf, delimiter = '\t')
+    ckfile = open(args.maf.name,'r')
+    cktext = ckfile.readlines()
+    if cktext[0][0] == "#":    
+        mafreader = csv.DictReader(cktext[1:], delimiter = '\t')
+    else:
+        mafreader = csv.DictReader(args.maf, delimiter = '\t')
+
     fields = mafreader.fieldnames
     if 'FILTER' not in fields:
         fields.append('FILTER')
@@ -74,9 +80,9 @@ def mainreduce(args):
         if not mrs:
             continue
         for mr in mrs:
-            centers = set(mr['CENTERS'].split('|'))
+            centers = set(mr['Center'].split('|'))
             mr['NCALLERS'] = len(centers)
-            mr['CENTERS'] = '|'.join(centers)
+            mr['Center'] = '|'.join(centers)
             if len(fset) > 0:
                 if args.append and 'FILTER' in mr and mr['FILTER'] != 'PASS':
                     mr['FILTER'] = ','.join(sorted(list(set(fset) | set(mr['FILTER'].split(',')))))
