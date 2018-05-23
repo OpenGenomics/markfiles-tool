@@ -80,9 +80,9 @@ def mainreduce(args):
         if not mrs:
             continue
         for mr in mrs:
-            centers = set(mr['Center'].split('|'))
+            centers = set(mr['CENTERS'].split('|'))
             mr['NCALLERS'] = len(centers)
-            mr['Center'] = '|'.join(centers)
+            mr['CENTERS'] = '|'.join(centers)
             if len(fset) > 0:
                 if args.append and 'FILTER' in mr and mr['FILTER'] != 'PASS':
                     mr['FILTER'] = ','.join(sorted(list(set(fset) | set(mr['FILTER'].split(',')))))
